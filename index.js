@@ -118,6 +118,10 @@ app.get("/playlist", async (req, res) => {
   }
 });
 
+app.get("/health", (_, res) => {
+  res.status(200).send("OK");
+});
+
 app.listen(process.env.PORT, () =>
   console.log(`✅ Server running on http://localhost:${process.env.PORT}`)
 );
