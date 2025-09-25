@@ -7,7 +7,23 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 dotenv.config();
 
 const app = express();
-app.use(cors());
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://mic-frontend.a2ys.dev",
+];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -122,6 +138,8 @@ app.get("/health", (_, res) => {
   res.status(200).send("OK");
 });
 
-app.listen(process.env.PORT, () =>
-  console.log(`✅ Server running on http://localhost:${process.env.PORT}`)
+const PORT = process.env.PORT || 3001;
+
+app.listen(PORT, () =>
+  console.log(`✅ Server running on http://localhost:${PORT}`)
 );
