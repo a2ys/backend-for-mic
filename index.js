@@ -89,7 +89,14 @@ app.get("/playlist", async (req, res) => {
       album: t.album.name,
       image: t.album.images[0]?.url,
       url: t.external_urls.spotify,
+      preview_url: t.preview_url,
     }));
+
+    // some Fisher-Yates shuffle to randomize the tracks cuz it goes in order 💀
+    for (let i = tracks.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [tracks[i], tracks[j]] = [tracks[j], tracks[i]];
+    }
 
     res.json({ tracks });
   } catch (err) {
