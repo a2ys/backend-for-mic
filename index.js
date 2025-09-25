@@ -43,6 +43,13 @@ async function getSpotifyToken() {
 app.post("/mood", async (req, res) => {
   try {
     const { text } = req.body;
+
+    if (!text || typeof text !== "string" || text.trim() === "") {
+      return res.status(400).json({
+        error: "Input text is required and must be a non-empty string.",
+      });
+    }
+
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     const prompt = `The user gave this mood: "${text}".
@@ -58,8 +65,9 @@ app.post("/mood", async (req, res) => {
     try {
       parsed = JSON.parse(raw);
     } catch (e) {
-      console.error("JSON parse error:", raw);
-      parsed = { keywords: [] };
+      console.error("Failed to parse JSON from Gemini:", raw);
+
+      return res.status(500).json({ error: "Failed to process AI response." });
     }
 
     res.json(parsed);
@@ -72,6 +80,11 @@ app.post("/mood", async (req, res) => {
 app.get("/playlist", async (req, res) => {
   try {
     const { query } = req.query;
+
+    if (!query || typeof query !== "string" || query.trim() === "") {
+      return res.status(400).json({ error: "A query parameter is required." });
+    }
+
     const token = await getSpotifyToken();
 
     const resp = await axios.get("https://api.spotify.com/v1/search", {

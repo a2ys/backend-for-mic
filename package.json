@@ -1,14 +1,16 @@
 {
-  "name": "backend",
+  "name": "music-backend-for-mic",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple music backend in Node.js using Express for MIC Recruitment",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    ""
+  ],
+  "author": "a2ys",
   "license": "ISC",
   "packageManager": "pnpm@10.15.1",
   "dependencies": {
